@@ -255,18 +255,18 @@ const Reviews = () => {
         </div>
 
         {/* Search and filters */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-6">
-          <div className="relative flex-grow">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 mb-6 ">
+          <div className="relative flex-grow text-black">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-black" />
             <Input
               placeholder="Search reviews..."
-              className="pl-9 border-indigo-100"
+              className="pl-9 border-indigo-100 "
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
 
-          <div className="flex items-center gap-3 flex-wrap">
+          <div className="flex items-center gap-3 flex-wrap text-black">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
