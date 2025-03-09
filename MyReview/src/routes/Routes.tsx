@@ -8,6 +8,7 @@ import RestaurantSetup from '../pages/RestaurantSetup';
 import VerifyEmail from '../pages/auth/VerifyEmail';
 import ReviewWizard from '../pages/[ZKReview]/review-wizard';
 import Callback from '../pages/auth/Callback';
+import ReviewsPage from '../pages/ReviewsPage';
 
 const AppRoutes = () => {
   return (
@@ -24,6 +25,8 @@ const AppRoutes = () => {
       {/* Other Routes */}
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/restaurant" element={<RestaurantSetup />} />
+
+      <Route path="/reviews" element={<ReviewsPage />} />
 
       {/* <Route path="/[ZKReview]/review-wizard" element={<ReviewWizard />} /> */}
 

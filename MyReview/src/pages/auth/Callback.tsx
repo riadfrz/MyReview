@@ -86,7 +86,6 @@ const Callback = () => {
       // Check for type/token combo which indicates magic link flow
       const type = searchParams.get('type');
       const accessToken = searchParams.get('access_token');
-      const refreshToken = searchParams.get('refresh_token');
 
       // For magic links or social auth
       if (
