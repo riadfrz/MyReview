@@ -10,6 +10,8 @@ import ReviewWizard from '../pages/[ZKReview]/review-wizard';
 import Callback from '../pages/auth/Callback';
 import ReviewsPage from '../pages/ReviewsPage';
 import VerifiedReviewPage from '../pages/VerifiedReview';
+import ForgotPassword from '../pages/auth/ForgotPassword';
+import ResetPassword from '../pages/auth/ResetPassword';
 
 const AppRoutes = () => {
   return (
@@ -22,6 +24,8 @@ const AppRoutes = () => {
       <Route path="/signup" element={<SignUp />} />
       <Route path="/auth/callback" element={<Callback />} />
       <Route path="/verifyEmail" element={<VerifyEmail />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
 
       {/* Other Routes */}
       <Route path="/dashboard" element={<Dashboard />} />
