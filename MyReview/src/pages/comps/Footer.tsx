@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { Link } from "react-router-dom";
 
 const Footer = () => (
     <footer className="bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800">
@@ -18,7 +18,7 @@ const Footer = () => (
             <ul className="space-y-2">
               <li>
                 <Link
-                  href="/about"
+                  to="/about"
                   className="text-slate-600 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
                 >
                   About
@@ -26,7 +26,7 @@ const Footer = () => (
               </li>
               <li>
                 <Link
-                  href="/contact"
+                  to="/contact"
                   className="text-slate-600 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
                 >
                   Contact
@@ -34,7 +34,7 @@ const Footer = () => (
               </li>
               <li>
                 <Link
-                  href="/privacy"
+                  to="/privacy"
                   className="text-slate-600 hover:text-blue-600 dark:text-slate-400 dark:hover:text-blue-400"
                 >
                   Privacy Policy

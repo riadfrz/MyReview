@@ -1,17 +1,19 @@
 // src/Routes.tsx
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import LandingPage from "../pages/LandingPage";
-
-
+import SignIn from "../pages/auth/SignIn";
+import SignUp from "../pages/auth/SignUp";
 
 const AppRoutes = () => {
   return (
     <Routes>
       {/* Landing Page Route */}
       <Route path="/" element={<LandingPage />} />
+      
+      {/* Authentication Routes */}
+      <Route path="/signin" element={<SignIn />} />
+      <Route path="/signup" element={<SignUp />} />
 
-      {/* Redirect all other routes to landing page */}
-      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 };

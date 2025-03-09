@@ -1,10 +1,13 @@
+/* Remove the restrictive styling that might be causing layout issues */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
 }
 
+/* Keep other styles that might be needed */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -21,7 +24,7 @@
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
-  }
+  }  
   to {
     transform: rotate(360deg);
   }
