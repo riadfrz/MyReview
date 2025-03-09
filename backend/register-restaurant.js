@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 const axios = require('axios');
+const { v4: uuidv4 } = require('uuid');
 
 // Configuration
 const API_URL = 'http://localhost:3002';
@@ -24,7 +25,7 @@ async function registerRestaurant() {
       '\nVous pouvez maintenant utiliser cet ID de restaurant pour soumettre des reviews.'
     );
     console.log(
-      `Essayez de visiter: http://localhost:5173/verified-review/${restaurantId}`
+      `Essayez de visiter: http://localhost:5173/verified-review/${response.data.restaurant.id}`
     );
   } catch (error) {
     console.error("❌ Échec de l'enregistrement:");
