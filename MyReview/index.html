@@ -1,13 +1,41 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Restaurant App</title>
+  <!-- This script is critical for client-side routing in Vite -->
+  <script type="module">
+    // This ensures React Router works with auth callbacks
+    (function () {
+      // Save the URL hash if present
+      const savedHash = window.location.hash;
+
+      // Handle SPA navigation by redirecting all routes to index with original parameters
+      if (window.location.pathname !== '/' && !window.location.pathname.startsWith('/assets/')) {
+        const url = new URL(window.location.href);
+        const redirectPath = url.pathname;
+        const search = url.search;
+
+        // Preserve query parameters
+        window.history.replaceState(
+          null,
+          document.title,
+          '/' + (search ? '?' + search.substring(1) : '') + (savedHash || '')
+        );
+
+        // Store the requested path to restore after app loads
+        sessionStorage.setItem('redirectPath', redirectPath);
+      }
+    })();
+  </script>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
 </html>
