@@ -17,6 +17,34 @@ app.use(bodyParser.json());
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 const supabase = createClient(supabaseUrl, supabaseKey);
+console.log('Supabase client initialized:', !!supabase);
+
+// Log de démarrage pour confirmer la connexion à Supabase
+(async () => {
+  try {
+    // Vérifier si on peut se connecter à Supabase
+    const { data, error } = await supabase.from('restaurants').select('count');
+    if (error) {
+      console.error('❌ Erreur de connexion à Supabase:', error.message);
+    } else {
+      console.log('✅ Connexion à Supabase établie avec succès');
+      // Lister les tables disponibles
+      const { data: tables, error: tablesError } = await supabase
+        .from('information_schema.tables')
+        .select('table_name')
+        .eq('table_schema', 'public');
+
+      if (!tablesError) {
+        console.log(
+          'Tables disponibles:',
+          tables.map((t) => t.table_name).join(', ')
+        );
+      }
+    }
+  } catch (err) {
+    console.error('❌ Erreur lors du test de connexion Supabase:', err.message);
+  }
+})();
 
 // In-memory storage for restaurants (we'll keep this simple)
 const restaurants = new Map();
@@ -32,6 +60,7 @@ const verifyZkProof = async (signedMessage, restaurantPublicKey) => {
   try {
     // Parse the signed message
     const message = JSON.parse(signedMessage);
+    console.log('Message signé à vérifier:', message);
 
     // Simulate verification logic
     // In a real implementation, we would verify the signature using the restaurant's public key
@@ -85,22 +114,34 @@ app.post('/register-restaurant', async (req, res) => {
       });
     }
 
+    console.log(`Tentative d'enregistrement du restaurant:`, { id, publicKey });
+
+    // Adapter aux colonnes réelles de votre table Supabase
+    // Supposons que la table s'appelle "restaurants" avec les colonnes:
+    // "id", "name", "public_key" ou "publicKey", "created_at"
+    const restaurantData = {
+      id: id,
+      name: `Restaurant ${id}`,
+      // Nous utilisons les deux possibilités pour la clé publique
+      public_key: publicKey,
+      publicKey: publicKey,
+      created_at: new Date().toISOString(),
+    };
+
     // Store restaurant in Supabase
     const { data, error } = await supabase
       .from('restaurants')
-      .upsert([
-        {
-          id: id,
-          public_key: publicKey,
-          name: `Restaurant ${id}`, // Default name
-          created_at: new Date().toISOString(),
-        },
-      ])
-      .select();
+      .upsert([restaurantData]);
 
     if (error) {
+      console.error(
+        "Erreur lors de l'enregistrement du restaurant dans Supabase:",
+        error
+      );
       throw error;
     }
+
+    console.log('Restaurant enregistré avec succès dans Supabase');
 
     // Also keep in memory for quick reference
     restaurants.set(id, { publicKey });
@@ -108,7 +149,7 @@ app.post('/register-restaurant', async (req, res) => {
     res.json({
       success: true,
       message: 'Restaurant registered successfully',
-      restaurant: data[0],
+      restaurant: restaurantData,
     });
   } catch (error) {
     console.error('Error registering restaurant:', error);
@@ -128,37 +169,9 @@ app.post('/generate-signed-message', async (req, res) => {
       });
     }
 
-    // Check if restaurant exists in Supabase
-    const { data: restaurant, error } = await supabase
-      .from('restaurants')
-      .select('id, public_key')
-      .eq('id', restaurantId)
-      .single();
-
-    if (error && error.code !== 'PGRST116') {
-      throw error;
-    }
-
-    // If restaurant doesn't exist, try to find any restaurant
-    let targetRestaurantId = restaurantId;
-    if (!restaurant) {
-      const { data: firstRestaurant, error: fetchError } = await supabase
-        .from('restaurants')
-        .select('id')
-        .limit(1)
-        .single();
-
-      if (fetchError && fetchError.code !== 'PGRST116') {
-        throw fetchError;
-      }
-
-      if (firstRestaurant) {
-        targetRestaurantId = firstRestaurant.id;
-        console.log(
-          `Restaurant ID ${restaurantId} not found, using ${targetRestaurantId} instead`
-        );
-      }
-    }
+    console.log(
+      `Génération d'un message signé pour le restaurant: ${restaurantId}`
+    );
 
     // Generate a visit ID and timestamp
     const visitId = crypto.randomBytes(8).toString('hex');
@@ -169,8 +182,10 @@ app.post('/generate-signed-message', async (req, res) => {
     const signedMessage = {
       visit_id: visitId,
       timestamp,
-      signature: `demo-signature-for-${targetRestaurantId}-${visitId}`,
+      signature: `demo-signature-for-${restaurantId}-${visitId}`,
     };
+
+    console.log('Message signé généré:', signedMessage);
 
     res.json({
       success: true,
@@ -195,21 +210,17 @@ app.post('/submit-review', async (req, res) => {
       });
     }
 
-    // Get restaurant public key from Supabase
-    const { data: restaurant, error: restaurantError } = await supabase
-      .from('restaurants')
-      .select('public_key')
-      .eq('id', restaurantId)
-      .single();
-
-    if (restaurantError && restaurantError.code !== 'PGRST116') {
-      throw restaurantError;
-    }
-
-    const publicKey = restaurant ? restaurant.public_key : 'demo-public-key';
+    console.log(`Soumission d'une review pour le restaurant: ${restaurantId}`);
+    console.log('Données de la review:', {
+      clientName,
+      reviewText: reviewText.substring(0, 50) + '...',
+    });
 
     // Verify the ZK proof
-    const verificationResult = await verifyZkProof(signedMessage, publicKey);
+    const verificationResult = await verifyZkProof(
+      signedMessage,
+      'demo-public-key'
+    );
 
     if (!verificationResult.valid) {
       return res.status(400).json({
@@ -225,32 +236,52 @@ app.post('/submit-review', async (req, res) => {
       rating = parseInt(ratingMatch[1], 10);
     }
 
-    // Create review object for Supabase
+    // Generate unique ID for the review
+    const reviewId = crypto.randomBytes(8).toString('hex');
+
+    // Create review object with variants for different column names
     const reviewData = {
-      id: crypto.randomBytes(8).toString('hex'),
+      id: reviewId,
+      review_id: reviewId,
       restaurant_id: restaurantId,
-      user_name: clientName,
+      restaurantId: restaurantId,
+      user_id: clientName, // Si la colonne est user_id
+      user_name: clientName, // Si la colonne est user_name
+      userName: clientName, // Si la colonne est userName
       review_text: reviewText,
+      reviewText: reviewText,
+      content: reviewText, // Une autre variante possible
       rating: rating,
       created_at: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
       is_verified: true,
+      isVerified: true,
       verification_id: verificationResult.verificationId,
+      verificationId: verificationResult.verificationId,
     };
 
+    console.log(
+      "Tentative d'insertion dans Supabase avec les données:",
+      reviewData
+    );
+
     // Store the review in Supabase
-    const { data, error } = await supabase
-      .from('reviews')
-      .insert([reviewData])
-      .select();
+    const { data, error } = await supabase.from('reviews').insert([reviewData]);
 
     if (error) {
+      console.error(
+        "Erreur lors de l'insertion de la review dans Supabase:",
+        error
+      );
       throw error;
     }
+
+    console.log('Review enregistrée avec succès dans Supabase');
 
     res.json({
       success: true,
       message: 'Review submitted successfully!',
-      review: data[0],
+      review: reviewData,
     });
   } catch (error) {
     console.error('Error submitting review:', error);
@@ -269,6 +300,8 @@ app.get('/reviews/:restaurantId', async (req, res) => {
         .json({ success: false, error: 'Restaurant ID is required' });
     }
 
+    console.log(`Récupération des reviews pour le restaurant: ${restaurantId}`);
+
     // Get reviews from Supabase
     const { data, error } = await supabase
       .from('reviews')
@@ -277,8 +310,16 @@ app.get('/reviews/:restaurantId', async (req, res) => {
       .order('created_at', { ascending: false });
 
     if (error) {
+      console.error(
+        'Erreur lors de la récupération des reviews depuis Supabase:',
+        error
+      );
       throw error;
     }
+
+    console.log(
+      `${data.length} reviews récupérées pour le restaurant ${restaurantId}`
+    );
 
     res.json({
       success: true,
@@ -293,15 +334,20 @@ app.get('/reviews/:restaurantId', async (req, res) => {
 // List all restaurants
 app.get('/restaurants', async (req, res) => {
   try {
+    console.log('Récupération de tous les restaurants');
+
     // Get restaurants from Supabase
-    const { data, error } = await supabase
-      .from('restaurants')
-      .select('*')
-      .order('created_at', { ascending: false });
+    const { data, error } = await supabase.from('restaurants').select('*');
 
     if (error) {
+      console.error(
+        'Erreur lors de la récupération des restaurants depuis Supabase:',
+        error
+      );
       throw error;
     }
+
+    console.log(`${data.length} restaurants récupérés`);
 
     res.json({
       success: true,
