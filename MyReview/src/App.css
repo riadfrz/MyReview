@@ -1,13 +1,13 @@
-/* Remove the restrictive styling that might be causing layout issues */
+/* Base styling for the entire application */
 #root {
   width: 100%;
   min-height: 100vh;
   margin: 0;
-  padding: 0;
+  padding: 0; /* Removed left padding to use full width */
   text-align: left;
 }
 
-/* Keep other styles that might be needed */
+/* Logo styling */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -42,4 +42,31 @@
 
 .read-the-docs {
   color: #888;
+}
+
+/* Consistent color scheme for the application */
+:root {
+  --primary-color: #4f46e5; /* Indigo 600 */
+  --primary-light: #818cf8; /* Indigo 400 */
+  --primary-dark: #3730a3; /* Indigo 800 */
+  --secondary-color: #8b5cf6; /* Violet 500 */
+  --accent-color: #06b6d4; /* Cyan 500 */
+  --background-light: #f5f7ff;
+  --text-primary: #1e293b; /* Slate 800 */
+  --text-secondary: #64748b; /* Slate 500 */
+}
+
+/* Container width adjustments for better space utilization */
+.container {
+  width: 100%;
+  max-width: 1400px; /* Increased from default to use more horizontal space */
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* Responsive adjustments */
+@media (min-width: 1024px) {
+  .container {
+    padding: 0 2rem;
+  }
 }
