@@ -1,5 +1,3 @@
-'use client';
-
 import { useState } from 'react';
 import { Button } from '../../components/ui/button';
 import {
@@ -56,8 +54,14 @@ const SignUp = () => {
     }
 
     try {
-      // Sign up with Supabase Auth
-      const { error: signUpError } = await supabase.auth.signUp({
+      // Get the full origin with protocol
+      const fullOrigin = window.location.origin;
+      const redirectUrl = `${fullOrigin}/auth/callback`;
+
+      console.log('Using redirect URL:', redirectUrl);
+
+      // Standard sign up with password
+      const { data, error: signUpError } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
         options: {
@@ -65,11 +69,13 @@ const SignUp = () => {
             first_name: formData.firstName,
             last_name: formData.lastName,
           },
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: redirectUrl,
         },
       });
 
       if (signUpError) throw signUpError;
+
+      console.log('Signup successful. Data:', data);
 
       toast({
         title: 'Account created!',
@@ -77,11 +83,18 @@ const SignUp = () => {
         duration: 5000,
       });
 
-      // Redirect to sign in page with success message
-      navigate('/signin?registered=true');
+      // Redirect to verify email page
+      navigate(`/verifyEmail?email=${encodeURIComponent(formData.email)}`);
     } catch (err: unknown) {
       console.error('Registration error:', err);
-      if (err instanceof Error && err.message.includes('duplicate key')) {
+      if (err instanceof Error && err.message.includes('rate limit')) {
+        setError(
+          'Too many email requests. Please try again later or use a different email address.'
+        );
+      } else if (
+        err instanceof Error &&
+        err.message.includes('duplicate key')
+      ) {
         setError(
           'This email is already registered. Please use a different email or try signing in.'
         );

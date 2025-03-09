@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button } from '../components/ui/button';
+import { Button } from '../../components/ui/button';
 import {
   Card,
   CardContent,
@@ -7,16 +7,16 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../components/ui/card';
+} from '../../components/ui/card';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 import { Mail, CheckCircle2 } from 'lucide-react';
-import { useToast } from '../components/ui/use-toast';
+import { useToast } from '../../components/ui/use-toast';
 
 const VerifyEmail = () => {
-const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const email = searchParams.get('email') || '';
   const [resendDisabled, setResendDisabled] = useState(false);
   const [countdown, setCountdown] = useState(60);
@@ -43,13 +43,21 @@ const [searchParams] = useSearchParams();
     }
   }, [resendDisabled]);
 
+  // In your VerifyEmail.tsx, modify the handleResendEmail function:
+
   const handleResendEmail = async () => {
     try {
+      // Use the fully qualified URL with http/https
+      const fullOrigin = window.location.origin; // e.g., http://localhost:5173
+      const redirectUrl = `${fullOrigin}/auth/callback`;
+
+      console.log('Using redirect URL for resend:', redirectUrl);
+
       const { error } = await supabase.auth.resend({
         type: 'signup',
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          emailRedirectTo: redirectUrl,
         },
       });
 
@@ -64,6 +72,13 @@ const [searchParams] = useSearchParams();
       setResendDisabled(true);
     } catch (error) {
       console.error('Error resending verification email:', error);
+      toast({
+        title: 'Error sending email',
+        description:
+          'There was a problem sending the verification email. Please try again.',
+        variant: 'destructive',
+        duration: 3000,
+      });
     }
   };
 
