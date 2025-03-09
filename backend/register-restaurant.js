@@ -9,38 +9,35 @@ const publicKey = process.argv[3] || 'demo-public-key-' + Date.now();
 async function registerRestaurant() {
   try {
     console.log(
-      `Registering restaurant with ID: ${restaurantId} and public key: ${publicKey}`
+      `Enregistrement du restaurant avec ID: ${restaurantId} et clé publique: ${publicKey}`
     );
 
-    // First register the contract if not already done
-    console.log('Registering contract...');
-    await axios.post(`${API_URL}/register-contract`);
-
-    // Then register the restaurant
-    console.log('Registering restaurant...');
+    // Enregistrer le restaurant directement
     const response = await axios.post(`${API_URL}/register-restaurant`, {
       id: restaurantId,
       publicKey,
     });
 
-    console.log('✅ Registration successful!');
-    console.log(response.data.result);
-    console.log('\nYou can now use this restaurant ID to submit reviews.');
+    console.log('✅ Enregistrement réussi!');
+    console.log(JSON.stringify(response.data, null, 2));
     console.log(
-      `Try visiting: http://localhost:5173/verified-review/${restaurantId}`
+      '\nVous pouvez maintenant utiliser cet ID de restaurant pour soumettre des reviews.'
+    );
+    console.log(
+      `Essayez de visiter: http://localhost:5173/verified-review/${restaurantId}`
     );
   } catch (error) {
-    console.error('❌ Registration failed:');
+    console.error("❌ Échec de l'enregistrement:");
     if (error.response) {
       console.error(error.response.data);
     } else {
       console.error(error.message);
     }
     console.error(
-      '\nMake sure the backend server is running (npm start in the backend directory)'
+      "\nAssurez-vous que le serveur backend est en cours d'exécution (npm start dans le répertoire backend)"
     );
   }
 }
 
-// Execute
+// Exécuter
 registerRestaurant();
