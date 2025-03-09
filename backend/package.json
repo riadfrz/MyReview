@@ -1,0 +1,28 @@
+{
+  "name": "myreview-backend",
+  "version": "1.0.0",
+  "description": "Backend for the MyReview app using Hylé blockchain",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "register": "node register-restaurant.js",
+    "direct": "node direct-supabase.js",
+    "setup-rls": "node setup-rls.js",
+    "simple-insert": "node direct-insert.js",
+    "existing-user": "node existing-user-insert.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.7",
+    "axios": "^1.6.7",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

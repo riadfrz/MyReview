@@ -1,0 +1,98 @@
+{
+  "restaurants": [
+    {
+      "id": "restaurant123",
+      "name": "Restaurant restaurant123",
+      "public_key": "demo-public-key-1741518564979",
+      "created_at": "2025-03-09T11:09:25.116Z"
+    },
+    {
+      "id": "1dd1f183-763b-4f32-a899-49beafca4947",
+      "name": "Restaurant restaurant123",
+      "address": "123 Main Street",
+      "avg_rating": 0,
+      "user_id": "14b8b75c-6cda-49ed-bdda-c230e66bba02",
+      "public_key": "demo-public-key-1741518624036",
+      "created_at": "2025-03-09T11:10:24.101Z",
+      "updated_at": "2025-03-09T11:10:24.101Z"
+    },
+    {
+      "id": "91c671af-e967-42b0-8b43-66171a72adab",
+      "name": "Restaurant restaurant123",
+      "address": "123 Main Street",
+      "avg_rating": 0,
+      "user_id": "14b8b75c-6cda-49ed-bdda-c230e66bba02",
+      "public_key": "demo-public-key-1741518848179",
+      "created_at": "2025-03-09T11:14:08.314Z",
+      "updated_at": "2025-03-09T11:14:08.314Z"
+    },
+    {
+      "id": "fb0196ba-edf8-41f3-b418-a3ade5d0aee6",
+      "name": "Restaurant restaurant123",
+      "address": "123 Main Street",
+      "avg_rating": 0,
+      "user_id": "14b8b75c-6cda-49ed-bdda-c230e66bba02",
+      "public_key": "demo-public-key-1741518923743",
+      "created_at": "2025-03-09T11:15:24.326Z",
+      "updated_at": "2025-03-09T11:15:24.326Z"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "f2d87f33ee12d5d3",
+      "restaurant_id": "restaurant123",
+      "user_name": "Gobigan",
+      "review_text": "Rating: 5/5 - test test test",
+      "rating": 5,
+      "created_at": "2025-03-09T11:05:09.667Z",
+      "is_verified": true,
+      "verification_id": "0c638cdad3b45a7136ce6517861bed5c"
+    },
+    {
+      "id": "e46ddd32-395d-4b0c-899b-75786007d331",
+      "restaurant_id": "1dd1f183-763b-4f32-a899-49beafca4947",
+      "user_id": "14b8b75c-6cda-49ed-bdda-c230e66bba02",
+      "rating": 5,
+      "review_text": "Rating: 5/5 - This is a test",
+      "created_at": "2025-03-09T11:10:45.827Z",
+      "updated_at": "2025-03-09T11:10:45.827Z",
+      "client_name": "Gobigan",
+      "is_verified": true,
+      "verification_id": "b4d3f44f1fb2674b0b5a62719cdd73bd"
+    },
+    {
+      "id": "cc83e436-4402-4040-ba74-4c26af358cda",
+      "restaurant_id": "91c671af-e967-42b0-8b43-66171a72adab",
+      "user_id": "14b8b75c-6cda-49ed-bdda-c230e66bba02",
+      "rating": 2,
+      "review_text": "Rating: 2/5 - Test test",
+      "created_at": "2025-03-09T11:14:41.985Z",
+      "updated_at": "2025-03-09T11:14:41.985Z",
+      "client_name": "Gobigan",
+      "is_verified": true,
+      "verification_id": "30977cf85aa45fd67e8b52883e2e3bb0"
+    },
+    {
+      "id": "29a32093-65bf-4b38-b325-3174acad81fa",
+      "restaurant_id": "fb0196ba-edf8-41f3-b418-a3ade5d0aee6",
+      "user_id": "14b8b75c-6cda-49ed-bdda-c230e66bba02",
+      "rating": 5,
+      "review_text": "Rating: 5/5 - test",
+      "created_at": "2025-03-09T11:16:12.603Z",
+      "updated_at": "2025-03-09T11:16:12.603Z",
+      "client_name": "Gobigan",
+      "is_verified": true,
+      "verification_id": "59288c192e19192a0383a223b64e8935"
+    }
+  ],
+  "users": [
+    {
+      "id": "14b8b75c-6cda-49ed-bdda-c230e66bba02",
+      "first_name": "Demo",
+      "last_name": "User",
+      "email": "demo@example.com",
+      "created_at": "2025-03-09T11:10:24.098Z",
+      "updated_at": "2025-03-09T11:10:24.098Z"
+    }
+  ]
+}
