@@ -9,6 +9,7 @@ import VerifyEmail from '../pages/auth/VerifyEmail';
 import ReviewWizard from '../pages/[ZKReview]/review-wizard';
 import Callback from '../pages/auth/Callback';
 import ReviewsPage from '../pages/ReviewsPage';
+import VerifiedReviewPage from '../pages/VerifiedReview';
 
 const AppRoutes = () => {
   return (
@@ -27,6 +28,12 @@ const AppRoutes = () => {
       <Route path="/restaurant" element={<RestaurantSetup />} />
 
       <Route path="/reviews" element={<ReviewsPage />} />
+
+      {/* Verified Review Routes */}
+      <Route
+        path="/verified-review/:restaurantId"
+        element={<VerifiedReviewPage />}
+      />
 
       {/* <Route path="/[ZKReview]/review-wizard" element={<ReviewWizard />} /> */}
 

@@ -33,9 +33,9 @@ enum Commands {
     },
     SubmitReview {
         restaurant_id: String,
-        client_name: String, // Renommé pour éviter le shadowing
+        client_name: String,
         review_text: String,
-        zk_proof: String,
+        signed_message: String,
         timestamp: u64,
     },
 }
@@ -112,29 +112,52 @@ async fn main() -> Result<()> {
         
         Commands::SubmitReview {
             restaurant_id,
-            client_name, // Utilisation du nouveau nom
+            client_name,
             review_text,
+            signed_message,
             timestamp,
         } => {
-            // Construire l'action pour soumettre une review
+            // Generate the zk proof from the signed message
+            // Calculate time range (last 30 days)
+            let current_time = std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .unwrap()
+                .as_secs();
+            let time_range_start = current_time - (30 * 24 * 60 * 60); // 30 days ago
+            let time_range_end = current_time;
+            
+            // Prepare inputs for the zk proof generation
+            let inputs = vec![
+                signed_message.as_bytes().to_vec(),
+                time_range_start.to_string().as_bytes().to_vec(),
+                time_range_end.to_string().as_bytes().to_vec(),
+            ];
+            
+            // Generate the zk proof
+            let (proof, journal) = prover.prove_inputs(&inputs).await.unwrap();
+            println!("✅ ZK Proof generated successfully");
+            println!("Journal: {}", String::from_utf8_lossy(&journal));
+            
+            // Construct the action to submit a review with the generated proof
             let action = RestaurantReviewAction::SubmitReview {
                 restaurant_id,
-                client: client_name, // Utilisation du nouveau nom
+                client: client_name,
                 review_text,
+                zk_proof: proof.to_vec(),
                 timestamp,
             };
 
-            // Construire la transaction blob
+            // Build the blob transaction
             let blobs = vec![action.as_blob(contract_name)];
             let blob_tx = BlobTransaction::new(identity.clone(), blobs.clone());
 
-            // Envoyer la transaction blob
+            // Send the blob transaction
             let blob_tx_hash = client.send_tx_blob(&blob_tx).await.unwrap();
-            println!("✅ Transaction blob envoyée. Hash : {}", blob_tx_hash);
+            println!("✅ Blob transaction sent. Hash: {}", blob_tx_hash);
 
-            // Générer la preuve zk
+            // Generate the zk proof for the contract execution
             let inputs = ContractInput {
-                state: Vec::new(), // État initial non nécessaire pour cette action
+                state: Vec::new(),
                 identity: identity.clone().into(),
                 tx_hash: blob_tx_hash,
                 private_input: vec![],
@@ -145,15 +168,15 @@ async fn main() -> Result<()> {
 
             let proof = prover.prove(inputs).await.unwrap();
 
-            // Construire la transaction de preuve
+            // Build the proof transaction
             let proof_tx = ProofTransaction {
                 proof,
                 contract_name: contract_name.clone().into(),
             };
 
-            // Envoyer la transaction de preuve
+            // Send the proof transaction
             let proof_tx_hash = client.send_tx_proof(&proof_tx).await.unwrap();
-            println!("✅ Transaction de preuve envoyée. Hash : {}", proof_tx_hash);
+            println!("✅ Proof transaction sent. Hash: {}", proof_tx_hash);
         }
     }
     Ok(())

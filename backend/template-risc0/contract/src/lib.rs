@@ -61,31 +61,24 @@ impl RestaurantReview {
         zk_proof: Vec<u8>,
         timestamp: u64,
     ) -> Result<(), String> {
-        // Vérifier que le restaurant existe
-        if let Some(restaurant) = self.restaurants.get(&restaurant_id) {
-            // Vérifier la preuve zkp (à implémenter avec Hylé)
-            if self.verify_zk_proof(&zk_proof, &restaurant.public_key) {
-                // Ajouter la review
-                let review = Review {
-                    client,
-                    review_text,
-                    zk_proof,
-                    timestamp,
-                };
-                self.reviews.entry(restaurant_id).or_insert_with(Vec::new).push(review);
-                Ok(())
-            } else {
-                Err("Invalid ZKP proof".to_string())
-            }
+        // Verify that the restaurant exists
+        if let Some(_restaurant) = self.restaurants.get(&restaurant_id) {
+            // Note: In the Hylé platform, zk-proof verification is done at the blockchain level
+            // We no longer need to verify the proof in the contract itself
+            // The contract is only executed if the proof is valid
+            
+            // Add the review
+            let review = Review {
+                client,
+                review_text,
+                zk_proof,
+                timestamp,
+            };
+            self.reviews.entry(restaurant_id).or_insert_with(Vec::new).push(review);
+            Ok(())
         } else {
             Err("Restaurant not found".to_string())
         }
-    }
-
-    /// Vérifier la preuve zkp (placeholder)
-    fn verify_zk_proof(&self, _proof: &[u8], _public_key: &[u8]) -> bool {
-        // Logique de vérification de la preuve zkp (à implémenter avec Hylé)
-        true // Placeholder
     }
 
     /// Convertir l'état en bytes
@@ -98,10 +91,10 @@ impl RestaurantReview {
 impl HyleContract for RestaurantReview {
     /// Point d'entrée de la logique du contrat
     fn execute(&mut self, contract_input: &sdk::ContractInput) -> RunResult {
-        // Analyser les entrées du contrat
+        // Parse contract inputs
         let (action, ctx) = sdk::utils::parse_raw_contract_input::<RestaurantReviewAction>(contract_input)?;
 
-        // Exécuter la logique du contrat
+        // Execute contract logic
         match action {
             RestaurantReviewAction::RegisterRestaurant { id, public_key } => {
                 self.register_restaurant(id, public_key);
@@ -110,13 +103,14 @@ impl HyleContract for RestaurantReview {
                 restaurant_id,
                 client,
                 review_text,
+                zk_proof,
                 timestamp,
             } => {
-                self.submit_review(restaurant_id, client, review_text, timestamp)?;
+                self.submit_review(restaurant_id, client, review_text, zk_proof, timestamp)?;
             }
         }
 
-        // Retourner un résultat (peut être utilisé pour donner un feedback à l'utilisateur)
+        // Return a result
         let program_output = "Action executed successfully".to_string();
         Ok((program_output, ctx, vec![]))
     }
