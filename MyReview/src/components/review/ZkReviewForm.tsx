@@ -20,7 +20,7 @@ import { Star } from 'lucide-react';
 import { Label } from '../ui/label';
 import { toast } from 'react-hot-toast';
 
-const API_BASE_URL = 'http://localhost:3001';
+const API_BASE_URL = 'http://localhost:3002';
 
 interface ZkReviewFormProps {
   restaurantId: string;

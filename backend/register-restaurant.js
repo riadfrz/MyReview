@@ -2,7 +2,7 @@
 const axios = require('axios');
 
 // Configuration
-const API_URL = 'http://localhost:3001';
+const API_URL = 'http://localhost:3002';
 const restaurantId = process.argv[2] || 'restaurant123';
 const publicKey = process.argv[3] || 'demo-public-key-' + Date.now();
 
