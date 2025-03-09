@@ -2,7 +2,7 @@ use anyhow::Result;
 use clap::{Parser, Subcommand};
 use client_sdk::helpers::risc0::Risc0Prover;
 use contract::{RestaurantReview, RestaurantReviewAction};
-use sdk::api::APIRegisterContract;
+    use sdk::api::APIRegisterContract;
 use sdk::{BlobTransaction, ProofTransaction};
 use sdk::{ContractInput, Digestable};
 
