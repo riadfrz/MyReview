@@ -85,7 +85,7 @@ const Navigation = () => {
                 <div className="flex items-center gap-2">
                   <Zap className="h-5 w-5 text-indigo-500" />
                   <h2 className="text-lg font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-                    TrustReview
+                    MyReview
                   </h2>
                 </div>
               </div>
@@ -117,7 +117,7 @@ const Navigation = () => {
           <div className="flex items-center gap-2">
             <Zap className="h-5 w-5 text-indigo-500" />
             <h2 className="text-lg font-bold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-              TrustReview
+              MyReview
             </h2>
           </div>
         </div>

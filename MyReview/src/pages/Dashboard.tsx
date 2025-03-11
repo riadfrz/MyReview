@@ -6,7 +6,7 @@ import QRCodeSection from '../components/dashboard/QRCodeSection';
 import ReviewLinkSection from '../components/dashboard/ReviewLinkSection';
 
 const Dashboard = () => {
-  const [currentLink, setCurrentLink] = useState('https://riadfarouzi.com');
+  const [currentLink, setCurrentLink] = useState('https://myreview.com');
 
   // Sample data - in a real app, this would come from an API
   const dashboardData = {
@@ -20,7 +20,7 @@ const Dashboard = () => {
 
   const handleCreateNewLink = () => {
     // This would typically call an API to generate a new link
-    setCurrentLink(`https://riadfarouzi.com/review/${Date.now()}`);
+    setCurrentLink(`https://myreview.com/review/${Date.now()}`);
   };
 
   return (

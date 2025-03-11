@@ -10,7 +10,7 @@ interface ReviewLinkSectionProps {
 }
 
 const ReviewLinkSection = ({
-  link = 'https://riadfarouzi.com',
+  link = 'https://myreview.com',
   onCreateNewLink,
 }: Partial<ReviewLinkSectionProps>) => {
   const { toast } = useToast();

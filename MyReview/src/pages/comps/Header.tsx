@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { Button } from "../../components/ui/button";
-import { Link } from "react-router-dom";
+import { Button } from '../../components/ui/button';
+import { Link } from 'react-router-dom';
 
 const Header = () => (
   <header className="fixed top-0 w-full bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm border-b border-slate-200 dark:border-slate-800 z-50">
@@ -9,27 +9,23 @@ const Header = () => (
       <div className="flex items-center space-x-8">
         <Link
           to="/"
-          className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent"
-        >
-          TrustReview
+          className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-teal-500 bg-clip-text text-transparent">
+          MyReview
         </Link>
         <div className="hidden md:flex items-center space-x-6">
           <Link
             to="/about"
-            className="text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors"
-          >
+            className="text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors">
             About
           </Link>
           <Link
             to="/features"
-            className="text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors"
-          >
+            className="text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors">
             Features
           </Link>
           <Link
             to="/pricing"
-            className="text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors"
-          >
+            className="text-slate-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-400 transition-colors">
             Pricing
           </Link>
         </div>
@@ -38,8 +34,7 @@ const Header = () => (
         <Link to="/signin">
           <Button
             variant="ghost"
-            className="font-medium hover:bg-blue-50 dark:hover:bg-blue-900/30"
-          >
+            className="font-medium hover:bg-blue-50 dark:hover:bg-blue-900/30">
             Sign In
           </Button>
         </Link>

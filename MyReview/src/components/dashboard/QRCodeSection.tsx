@@ -11,7 +11,7 @@ interface QRCodeSectionProps {
 }
 
 const QRCodeSection = ({
-  link = 'https://riadfarouzi.com',
+  link = 'https://myreview.com',
 }: Partial<QRCodeSectionProps>) => {
   const [key, setKey] = useState('initial-key');
   const [isQRDialogOpen, setIsQRDialogOpen] = useState(false);
